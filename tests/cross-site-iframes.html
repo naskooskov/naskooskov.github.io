@@ -1,0 +1,30 @@
+<html>
+<head>
+<script>
+var nextFrameNum = 1;
+
+function addFrame() {
+  var frameHTML =
+      "Frame " + nextFrameNum + ":<br>\n" +
+      "<iframe id=\"frame" + nextFrameNum + "\" src=\"data:text/html,Initial page\" width=500 height=300></iframe><br>\n" +
+      "<button onclick=\"navFrame(" + nextFrameNum + ", 'https://naskooskov.github.io/')\">Go cross-site (https index)</button>\n" +
+      "<button onclick=\"navFrame(" + nextFrameNum + ", 'http://tests.netsekure.org/slow.php?seconds=10')\">Go cross-site (slow)</button>\n" +
+      "<button onclick=\"navFrame(" + nextFrameNum + ", '/')\">Go same-site</button><p>\n";
+  document.body.innerHTML += frameHTML;
+  nextFrameNum++;
+}
+
+function navFrame(num, url) {
+  document.getElementById("frame" + num).src = url;
+}
+
+</script>
+</head>
+<body onload="addFrame()">
+<h1>Cross-site iframe test</h1>
+
+<button onclick="addFrame()">Add Frame</button>
+<p>
+<hr>
+
+</html>
