@@ -16,8 +16,11 @@ self.addEventListener('activate', function(event) {
   
 self.addEventListener('push', function(event) {
   console.log('Push message', event);
-  fetch(url_linux).then(function(response) { return response.json(); }).then(notifyBotStatus);
-  fetch(url_win).then(function(response) { return response.json(); }).then(notifyBotStatus);
+  
+  event.waitUntil(
+    fetch(url_linux).then(function(response) { return response.json(); }).then(notifyBotStatus);
+    fetch(url_win).then(function(response) { return response.json(); }).then(notifyBotStatus);
+  );
 });       
 
 self.addEventListener('notificationclick', function(event) {
