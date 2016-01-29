@@ -8,7 +8,7 @@ var debugOut = document.getElementById('debug');
 
 function log(msg) {
   console.log(msg);
-  debugOut.innerHTML += message + '<br>';
+  debugOut.innerHTML += msg + '<br>';
 }
 
 if ('serviceWorker' in navigator) {
