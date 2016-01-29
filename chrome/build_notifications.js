@@ -4,16 +4,21 @@ var sub;
 var isSubscribed = false;
 var subscribeButton = document.querySelector('button');
 var subId = document.getElementById('sub_id');
-var curlId = document.getElementById('curl');
+var debugOut = document.getElementById('debug');
+
+function log(msg) {
+  console.log(msg);
+  debugOut.innerHTML += message + '<br>';
+}
 
 if ('serviceWorker' in navigator) {
-  console.log('Service Worker is supported');
+  log('Service Worker is supported');
   navigator.serviceWorker.register('sw.js').then(function() {
     return navigator.serviceWorker.ready;
   }).then(function(serviceWorkerRegistration) {
     reg = serviceWorkerRegistration;
     subscribeButton.disabled = false;
-    console.log('Service Worker is ready :^)', reg);
+    log('Service Worker is ready :^) ' + reg);
     serviceWorkerRegistration.pushManager.getSubscription()
       .then(function(subscription) {
         if (!subscription) {
@@ -29,10 +34,10 @@ if ('serviceWorker' in navigator) {
         setSubId(subscription);
       })
       .catch(function(err) {
-        console.log('Error during getSubscription()', err);
+        log('Error during getSubscription() ' + err);
       });
   }).catch(function(error) {
-    console.log('Service Worker Error :^(', error);
+    log('Service Worker Error :^( ' + error);
   });
 }
 
@@ -48,7 +53,7 @@ function subscribe() {
   reg.pushManager.subscribe({userVisibleOnly: true}).
   then(function(pushSubscription) {
     sub = pushSubscription;
-    console.log('Subscribed! Endpoint:', sub.endpoint);
+    log('Subscribed! Endpoint:' + sub.endpoint);
     subscribeButton.textContent = 'Unsubscribe';
     subId.innerText = sub.endpoint;
     isSubscribed = true;
@@ -59,10 +64,10 @@ function subscribe() {
 function unsubscribe() {
   sub.unsubscribe().then(function(event) {
     subscribeButton.textContent = 'Subscribe';
-    console.log('Unsubscribed!', event);
+    log('Unsubscribed! ' + event);
     isSubscribed = false;
   }).catch(function(error) {
-    console.log('Error unsubscribing', error);
+    log('Error unsubscribing ' + error);
     subscribeButton.textContent = 'Subscribe';
   });
 }
