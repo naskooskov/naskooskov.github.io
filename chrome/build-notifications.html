@@ -1,9 +1,15 @@
 <html>
 <head>
   <title>Build Bot Notifications</title>
-  <script src="build_notifications.js"></script>
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
+  <button disabled>Subscribe</button> to notifications.<br>
+
+  Subscription id: <span id="sub_id"></span><br><br>
+  curl command line: <span id="curl"></span><br>
+
+  <script src="build_notifications.js"></script>
 </body>
 </html>
