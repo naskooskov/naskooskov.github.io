@@ -18,8 +18,10 @@ self.addEventListener('push', function(event) {
   console.log('Push message', event);
   
   event.waitUntil(
-    fetch(url_linux).then(function(response) { return response.json(); }).then(notifyBotStatus);
-    fetch(url_win).then(function(response) { return response.json(); }).then(notifyBotStatus);
+    Promise.all(
+      fetch(url_linux).then(function(response) { return response.json(); }).then(notifyBotStatus),
+      fetch(url_win).then(function(response) { return response.json(); }).then(notifyBotStatus)
+    )
   );
 });       
 
