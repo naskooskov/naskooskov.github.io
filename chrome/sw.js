@@ -18,10 +18,16 @@ self.addEventListener('push', function(event) {
   console.log('Push message', event);
   
   event.waitUntil(
-    Promise.all(
-      fetch(url_linux).then(function(response) { return response.json(); }).then(notifyBotStatus),
-      fetch(url_win).then(function(response) { return response.json(); }).then(notifyBotStatus)
-    )
+    Promise.all([
+      fetch(url_linux).then(function(response) { return response.json(); }).then(getBotStatus),
+      fetch(url_win).then(function(response) { return response.json(); }).then(getBotStatus)
+    ]).then(function(data) {
+      var msg = data[0] + "\n" + data[1];
+      self.registration.showNotification("Build Bot Status", {
+        'body': msg,
+        'icon': 'images/icon.png'
+      });
+    })
   );
 });       
 
@@ -30,7 +36,7 @@ self.addEventListener('notificationclick', function(event) {
   event.notification.close();
 });
 
-function notifyBotStatus(json) {                                            
+function getBotStatus(json) {                                            
   console.log('build status:', json);                                       
   var msg = json.step_records[0].builder + ": ";
   if (json.step_records[0].result === "0") {
@@ -40,8 +46,5 @@ function notifyBotStatus(json) {
   } else {
     msg += " other.";
   }   
-  self.registration.showNotification("Build Bot Status", {
-    'body': msg,
-    'icon': 'images/icon.png'
-  }); 
+  return msg;
 }
