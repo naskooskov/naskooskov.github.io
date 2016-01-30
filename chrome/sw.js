@@ -25,7 +25,7 @@ self.addEventListener('push', function(event) {
       var msg = data[0] + "\n" + data[1];
       self.registration.showNotification("Build Bot Status", {
         'body': msg,
-        'icon': 'images/icon.png'
+        'requireInteraction': true,
       });
     }));
 });       
