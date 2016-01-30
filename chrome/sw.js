@@ -16,19 +16,18 @@ self.addEventListener('activate', function(event) {
   
 self.addEventListener('push', function(event) {
   console.log('Push message', event);
+
+  var p1 = fetch(url_linux).then(function(response) { return response.json(); }).then(getBotStatus);
+  var p2 = fetch(url_win).then(function(response) { return response.json(); }).then(getBotStatus);
   
   event.waitUntil(
-    Promise.all([
-      fetch(url_linux).then(function(response) { return response.json(); }).then(getBotStatus),
-      fetch(url_win).then(function(response) { return response.json(); }).then(getBotStatus)
-    ]).then(function(data) {
+    Promise.all([p1, p2]).then(function(data) {
       var msg = data[0] + "\n" + data[1];
       self.registration.showNotification("Build Bot Status", {
         'body': msg,
         'icon': 'images/icon.png'
       });
-    })
-  );
+    }));
 });       
 
 self.addEventListener('notificationclick', function(event) {
